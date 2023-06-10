@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import joblib
-import streamlit.components.v1 as components
+import pickle
 
 # Load the trained RandomForestClassifier model
-model = joblib.load('best_model.pkl')
+with open('best_model.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 # Custom CSS styling
 st.markdown(
