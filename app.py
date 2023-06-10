@@ -1,17 +1,21 @@
 import streamlit as st
 import pandas as pd
 import requests
-import pickle
+import joblib
 
 # URL of the trained RandomForestClassifier model file on GitHub
-model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
+model_url = "https://github.com/PratulG/churn/raw/main/best_model.joblib"
 
 # Download the model file from GitHub
 response = requests.get(model_url)
 response.raise_for_status()
 
+# Save the downloaded model file locally
+with open("best_model.joblib", "wb") as file:
+    file.write(response.content)
+
 # Load the downloaded model file
-model = pickle.loads(response.content)
+model = joblib.load("best_model.joblib")
 
 
 # Set up the Streamlit app
