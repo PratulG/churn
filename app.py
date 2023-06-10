@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import pickle
 import requests
+import pickle
 
 # URL of the trained RandomForestClassifier model file on GitHub
 model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
@@ -11,44 +11,8 @@ response = requests.get(model_url)
 response.raise_for_status()
 
 # Load the downloaded model file
-with open("best_model.pkl", "wb") as file:
-    file.write(response.content)
+model = pickle.loads(response.content)
 
-# Load the model from the downloaded file
-with open("best_model.pkl", "rb") as file:
-    model = pickle.load(file)
-
-# Custom CSS styling
-st.markdown(
-    """
-    <style>
-    .container {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f5f5f5;
-        border-radius: 10px;
-        font-family: 'Arial', sans-serif;
-    }
-    .title {
-        text-align: center;
-        font-size: 30px;
-        color: #333333;
-        margin-bottom: 30px;
-    }
-    .label {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .prediction {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 20px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # Set up the Streamlit app
 st.title('Customer Churn Prediction')
@@ -74,28 +38,20 @@ prediction = model.predict(input_data)
 prediction_prob = model.predict_proba(input_data)[:, 1]
 
 # Display the prediction result
-st.markdown('<div class="container">', unsafe_allow_html=True)
-st.markdown('<div class="title">Customer Churn Prediction</div>', unsafe_allow_html=True)
+st.header('Customer Churn Prediction')
+st.subheader('Input Features')
 
-st.markdown('<div class="label">Age:</div>', unsafe_allow_html=True)
-st.markdown(f'<div>{age}</div>', unsafe_allow_html=True)
+st.markdown(f'Age: {age}')
+st.markdown(f'Balance: {balance}')
+st.markdown(f'Active Member: {active_member}')
+st.markdown(f'Tenure: {tenure}')
+st.markdown(f'Number of Products: {products_number}')
 
-st.markdown('<div class="label">Balance:</div>', unsafe_allow_html=True)
-st.markdown(f'<div>{balance}</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="label">Active Member:</div>', unsafe_allow_html=True)
-st.markdown(f'<div>{active_member}</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="label">Tenure:</div>', unsafe_allow_html=True)
-st.markdown(f'<div>{tenure}</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="label">Number of Products:</div>', unsafe_allow_html=True)
-st.markdown(f'<div>{products_number}</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="prediction">Prediction:</div>', unsafe_allow_html=True)
+st.subheader('Prediction')
 if prediction[0] == 0:
-    st.markdown('<div class="prediction">The customer is likely to <strong>stay</strong>.</div>', unsafe_allow_html=True)
+    st.markdown('The customer is likely to **stay**.')
 else:
-    st.markdown('<div class="prediction">The customer is likely to <strong>churn</strong>.</div>', unsafe_allow_html=True)
+    st.markdown('The customer is likely to **churn**.')
 
-st.markdown(f'<div class="prediction">Churn Probability: {prediction_prob[0]:.2%}</div>', unsafe_allow_html=True)
+st.subheader('Churn Probability')
+st.markdown(f'{prediction_prob[0]*100:.2f}%')
