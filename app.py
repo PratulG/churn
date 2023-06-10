@@ -11,7 +11,12 @@ response = requests.get(model_url)
 response.raise_for_status()
 
 # Load the downloaded model file
-model = pickle.loads(response.content)
+with open("best_model.pkl", "wb") as file:
+    file.write(response.content)
+
+# Load the model from the downloaded file
+with open("best_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
 # Custom CSS styling
 st.markdown(
