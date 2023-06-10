@@ -1,38 +1,37 @@
 import streamlit as st
 import pandas as pd
-import cloudpickle as pickle
+import joblib
+import streamlit.components.v1 as components
 
 # Load the trained RandomForestClassifier model
-with open('best_model.pkl', 'rb') as file:
-    model = pickle.load(file)
+model = joblib.load('best_model.pkl')
 
-# Set up the Streamlit app
-st.set_page_config(page_title='Customer Churn Prediction', layout='centered')
-
-# Apply custom CSS styles
+# Custom CSS styling
 st.markdown(
     """
     <style>
-    body {
-        background-color: white;
-        color: blue;
-    }
     .container {
         max-width: 500px;
         margin: 0 auto;
         padding: 20px;
         background-color: #f5f5f5;
         border-radius: 10px;
+        font-family: 'Arial', sans-serif;
     }
     .title {
         text-align: center;
         font-size: 30px;
-        color: blue;
+        color: #333333;
         margin-bottom: 30px;
     }
     .label {
         font-weight: bold;
         margin-bottom: 10px;
+    }
+    .prediction {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
     }
     </style>
     """,
@@ -63,8 +62,28 @@ prediction = model.predict(input_data)
 prediction_prob = model.predict_proba(input_data)[:, 1]
 
 # Display the prediction result
+st.markdown('<div class="container">', unsafe_allow_html=True)
+st.markdown('<div class="title">Customer Churn Prediction</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Age:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{age}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Balance:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{balance}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Active Member:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{active_member}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Tenure:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{tenure}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Number of Products:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{products_number}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="prediction">Prediction:</div>', unsafe_allow_html=True)
 if prediction[0] == 0:
-    st.markdown('**Prediction:** The customer is likely to **stay**.')
+    st.markdown('<div class="prediction">The customer is likely to <strong>stay</strong>.</div>', unsafe_allow_html=True)
 else:
-    st.markdown('**Prediction:** The customer is likely to **churn**.')
-st.markdown(f'Churn Probability: {prediction_prob[0]:.2%}')
+    st.markdown('<div class="prediction">The customer is likely to <strong>churn</strong>.</div>', unsafe_allow_html=True)
+
+st.markdown(f'<div class="prediction">Churn Probability: {prediction_prob[0]:.2%}</div>', unsafe_allow_html=True)
