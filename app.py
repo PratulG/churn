@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-import joblib
+import pickle
 
 # URL of the trained RandomForestClassifier model file on GitHub
 model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
@@ -15,7 +15,8 @@ with open("best_model.pkl", "wb") as file:
     file.write(response.content)
 
 # Load the downloaded model file
-model = joblib.load("best_model.pkl")
+with open("best_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
 # Set up the Streamlit app
 st.title('Customer Churn Prediction')
