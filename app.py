@@ -15,8 +15,11 @@ with open("best_model.pkl", "wb") as file:
     file.write(response.content)
 
 # Load the downloaded model file
-with open("best_model.pkl", "rb") as file:
-    model = pickle.load(file)
+try:
+    with open("best_model.pkl", "rb") as file:
+        model = pickle.load(file)
+except Exception as e:
+    st.error(f"Error loading the model: {e}")
 
 # Set up the Streamlit app
 st.title('Customer Churn Prediction')
