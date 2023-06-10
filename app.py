@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 import requests
 import pickle
+import subprocess
+
+# Check if scikit-learn is installed, and install it if not
+try:
+    import sklearn
+except ImportError:
+    subprocess.check_call(["pip", "install", "scikit-learn"])
 
 # URL of the trained RandomForestClassifier model file on GitHub
 model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
@@ -40,9 +47,20 @@ input_data = pd.DataFrame({
     'products_number': [products_number]
 })
 
+# Print input data for debugging
+st.write('Input Data:')
+st.write(input_data)
+
+# Print model details for debugging
+st.write('Model Details:')
+st.write(model)
+
 # Make predictions using the loaded model
-prediction = model.predict(input_data)
-prediction_prob = model.predict_proba(input_data)[:, 1]
+try:
+    prediction = model.predict(input_data)
+    prediction_prob = model.predict_proba(input_data)[:, 1]
+except Exception as e:
+    st.error(f"Error predicting churn: {e}")
 
 # Display the prediction result
 st.markdown('<div class="container">', unsafe_allow_html=True)
@@ -69,4 +87,3 @@ if prediction[0] == 0:
 else:
     st.markdown('<div class="prediction">The customer is likely to <strong>churn</strong>.</div>', unsafe_allow_html=True)
 
-st.markdown(f'<div class="prediction">Churn Probability: {prediction_prob[0]:.2%}</div>', unsafe_allow_html=True)
