@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import pickle
 import subprocess
 
 # Check if scikit-learn is installed, and install it if not
@@ -11,20 +10,20 @@ except ImportError:
     subprocess.check_call(["pip", "install", "scikit-learn"])
 
 # URL of the trained RandomForestClassifier model file on GitHub
-model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
+model_url = "https://github.com/PratulG/churn/raw/main/best_model.joblib"
 
 # Download the model file from GitHub
 response = requests.get(model_url)
 response.raise_for_status()
 
 # Save the model file locally
-with open("best_model.pkl", "wb") as file:
+with open("best_model.joblib", "wb") as file:
     file.write(response.content)
 
 # Load the downloaded model file
 try:
-    with open("best_model.pkl", "rb") as file:
-        model = pickle.load(file)
+    import joblib
+    model = joblib.load("best_model.joblib")
 except Exception as e:
     st.error(f"Error loading the model: {e}")
 
