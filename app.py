@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import pickle
 import requests
 
 # URL of the trained RandomForestClassifier model file on GitHub
@@ -11,12 +11,7 @@ response = requests.get(model_url)
 response.raise_for_status()
 
 # Load the downloaded model file
-model = joblib.load(response.content)
-
-# Rest of the code remains the same...
-
-
-# Rest of the code remains the same...
+model = pickle.loads(response.content)
 
 # Custom CSS styling
 st.markdown(
