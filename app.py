@@ -4,19 +4,18 @@ import requests
 import joblib
 
 # URL of the trained RandomForestClassifier model file on GitHub
-model_url = "https://github.com/PratulG/churn/raw/main/best_model.joblib"
+model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
 
 # Download the model file from GitHub
 response = requests.get(model_url)
 response.raise_for_status()
 
-# Save the downloaded model file locally
-with open("best_model.joblib", "wb") as file:
+# Save the model file locally
+with open("best_model.pkl", "wb") as file:
     file.write(response.content)
 
 # Load the downloaded model file
-model = joblib.load("best_model.joblib")
-
+model = joblib.load("best_model.pkl")
 
 # Set up the Streamlit app
 st.title('Customer Churn Prediction')
@@ -42,20 +41,28 @@ prediction = model.predict(input_data)
 prediction_prob = model.predict_proba(input_data)[:, 1]
 
 # Display the prediction result
-st.header('Customer Churn Prediction')
-st.subheader('Input Features')
+st.markdown('<div class="container">', unsafe_allow_html=True)
+st.markdown('<div class="title">Customer Churn Prediction</div>', unsafe_allow_html=True)
 
-st.markdown(f'Age: {age}')
-st.markdown(f'Balance: {balance}')
-st.markdown(f'Active Member: {active_member}')
-st.markdown(f'Tenure: {tenure}')
-st.markdown(f'Number of Products: {products_number}')
+st.markdown('<div class="label">Age:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{age}</div>', unsafe_allow_html=True)
 
-st.subheader('Prediction')
+st.markdown('<div class="label">Balance:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{balance}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Active Member:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{active_member}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Tenure:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{tenure}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="label">Number of Products:</div>', unsafe_allow_html=True)
+st.markdown(f'<div>{products_number}</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="prediction">Prediction:</div>', unsafe_allow_html=True)
 if prediction[0] == 0:
-    st.markdown('The customer is likely to **stay**.')
+    st.markdown('<div class="prediction">The customer is likely to <strong>stay</strong>.</div>', unsafe_allow_html=True)
 else:
-    st.markdown('The customer is likely to **churn**.')
+    st.markdown('<div class="prediction">The customer is likely to <strong>churn</strong>.</div>', unsafe_allow_html=True)
 
-st.subheader('Churn Probability')
-st.markdown(f'{prediction_prob[0]*100:.2f}%')
+st.markdown(f'<div class="prediction">Churn Probability: {prediction_prob[0]:.2%}</div>', unsafe_allow_html=True)
