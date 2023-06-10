@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import cloudpickle as pickle
 
 # Load the trained RandomForestClassifier model
 with open('best_model.pkl', 'rb') as file:
