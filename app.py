@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import pickle
 import subprocess
 
 # Check if scikit-learn is installed, and install it if not
@@ -85,5 +84,4 @@ st.markdown('<div class="prediction">Prediction:</div>', unsafe_allow_html=True)
 if prediction[0] == 0:
     st.markdown('<div class="prediction">The customer is likely to <strong>stay</strong>.</div>', unsafe_allow_html=True)
 else:
-    st.markdown('<div class="prediction">The customer is likely to <strong>churn</strong>.</div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="prediction">The customer is likely to <strong>churn
