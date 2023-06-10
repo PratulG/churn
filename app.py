@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import dill
 
 # Load the trained RandomForestClassifier model
 with open('best_model.pkl', 'rb') as file:
-    model = pickle.load(file)
+    model = dill.load(file)
 
 # Custom CSS styling
 st.markdown(
