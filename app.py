@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 import requests
 import pickle
+import subprocess
+
+# Check if scikit-learn is installed, and install it if not
+try:
+    import sklearn
+except ImportError:
+    subprocess.check_call(["pip", "install", "scikit-learn"])
 
 # URL of the trained RandomForestClassifier model file on GitHub
 model_url = "https://github.com/PratulG/churn/raw/main/best_model.pkl"
