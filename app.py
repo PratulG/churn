@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import pickle
 
 # Load the trained RandomForestClassifier model
-model = joblib.load('best_model.pkl')
+with open('best_model.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 # Set up the Streamlit app
 st.set_page_config(page_title='Customer Churn Prediction', layout='centered')
